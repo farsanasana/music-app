@@ -106,27 +106,6 @@ Future<void> removeFromFav(int id) async {
   fav.notifyListeners();
 }
 
-favfetch() async {
-  List<FavoriteModel> favsongcheck = [];
-  Box<FavoriteModel> favdb = await Hive.openBox('fav_DB');
-  favsongcheck.addAll(favdb.values);
-  for (var favs in favsongcheck) {
-    int count = 0;
-    for (var songs in allSongs) {
-      if (favs.id == songs.id) {
-        fav.value.insert(0, songs);
-        break;
-      } else {
-        count++;
-      }
-    }
-    if (count == allSongs.length) {
-      var key = favs.key;
-      favdb.delete(key);
-    }
-  }
-}
-
 bool favoriteChecking(int data) {
   for (var element in fav.value) {
     if (data == element.id) {
@@ -332,21 +311,3 @@ mostplayedadd(AllSongModel song) async {
     mostPlayedList.value = mostPlayedList.value.sublist(0, 10);
   }
 }
-
-// ValueNotifier<List<AllSongModel>> mostPlayedList =
-//     ValueNotifier<List<AllSongModel>>([]);
-
-// Future<void> mostplayedadd(AllSongModel song) async {
-//   final Box<int> mostPlayedDB = await Hive.openBox('MostPLayed');
-//   int count = (mostPlayedDB.get(song.id) ?? 0) + 1;
-//   mostPlayedDB.put(song.id, count);
-
-//   if (count > 4 && !mostPlayedList.value.contains(song)) {
-//     mostPlayedList.value = [...mostPlayedList.value, song];
-//   }
-
-//   if (mostPlayedList.value.length > 10) {
-//     mostPlayedList.value = mostPlayedList.value.sublist(0, 10);
-//   }
-//   print("Most Played List: ${mostPlayedList.value}");
-// }

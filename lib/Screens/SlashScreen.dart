@@ -20,15 +20,17 @@ class SlashScreen extends StatefulWidget {
 }
 
 class _SlashScreenState extends State<SlashScreen> {
+  // late List<AllSongModel> allSongs;
+
   @override
   void initState() {
-    initializeApp();
     super.initState();
+    initializeApp();
   }
 
   @override
   Widget build(BuildContext context) {
-    gotoHome(context);
+    goToHome(context);
     return Scaffold(
       backgroundColor: KBprimary,
       body: Center(child: Image.asset('assets/Logoo.png')),
@@ -43,44 +45,45 @@ Future<void> initializeApp() async {
   if (hasStoragePermission) {
     //---------------------------SongFetch-------------------------
     List<SongModel> fetchSong = await audioQuery.querySongs();
-    for (SongModel element in fetchSong) {
-      allSongs.add(AllSongModel(
-          name: element.displayNameWOExt,
-          artist: element.artist,
-          duration: element.duration,
-          id: element.id,
-          uri: element.uri));
-    }
+    allSongs = fetchSong
+        .map((element) => AllSongModel(
+              name: element.displayNameWOExt,
+              artist: element.artist,
+              duration: element.duration,
+              id: element.id,
+              uri: element.uri,
+            ))
+        .toList();
   }
 }
 
-Future<void> gotoHome(BuildContext context) async {
-  // Receive the context here
+Future<void> goToHome(BuildContext context) async {
   await Future.delayed(const Duration(seconds: 3));
   Navigator.pushReplacement(
     context,
-    MaterialPageRoute(builder: (ctx) => BottomNavigationScreen()),
+    MaterialPageRoute(
+        builder: (BuildContext context) => BottomNavigationScreen()),
   );
-  await fetchForRecentlyPlayed();
-  await favfetch();
-  await fetchForMostlyPlayed();
+  await fetchForRecentlyPlayed(allSongs);
+  await favFetch();
+  await fetchForMostlyPlayed(allSongs);
 }
 
-fetchForRecentlyPlayed() async {
+fetchForRecentlyPlayed(List<AllSongModel> allSongs) async {
   Box<int> recentDb = await Hive.openBox('recent');
-  List<AllSongModel> recenttemp = [];
+  List<AllSongModel> recentTemp = [];
   for (int element in recentDb.values) {
     for (AllSongModel song in allSongs) {
       if (element == song.id) {
-        recenttemp.add(song);
+        recentTemp.add(song);
         break;
       }
     }
   }
-  recentList.value = recenttemp.reversed.toList();
+  recentList.value = recentTemp.reversed.toList();
 }
 
-fetchForMostlyPlayed() async {
+fetchForMostlyPlayed(List<AllSongModel> allSongs) async {
   final Box<int> mostPlayedDB = await Hive.openBox('MostPlayed');
   if (mostPlayedDB.isEmpty) {
     for (AllSongModel elements in allSongs) {

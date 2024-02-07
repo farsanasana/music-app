@@ -23,7 +23,6 @@ class BottomNavigationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: const Color.fromARGB(255, 236, 232, 220),
       body: SafeArea(
         child: ValueListenableBuilder(
           valueListenable: _currentIndex,
@@ -51,7 +50,7 @@ class BottomNavigationScreen extends StatelessWidget {
                     Icons.home,
                     size: 28,
                   ),
-                  label: 'Home',
+                  label: 'Home', //got to allsongs
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(

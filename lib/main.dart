@@ -4,7 +4,10 @@ import 'package:newwwone/DB/main_Models.dart';
 import 'package:newwwone/Screens/SlashScreen.dart';
 
 Future<void> main() async {
+  // Initialize Hive and register adapters
   await Hive.initFlutter();
+
+  // Register adapters
   if (!Hive.isAdapterRegistered(AllSongModelAdapter().typeId)) {
     Hive.registerAdapter(AllSongModelAdapter());
     if (!Hive.isAdapterRegistered(FavoriteModelAdapter().typeId)) {
@@ -14,6 +17,7 @@ Future<void> main() async {
       Hive.registerAdapter(PlayListModelAdapter());
     }
   }
+  // Open the 'favorite' box
   await Hive.openBox<AllSongModel>('favorite');
   runApp(const MyApp());
 }

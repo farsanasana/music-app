@@ -15,7 +15,7 @@ class MyFavoritesScreen extends StatefulWidget {
 class _MyFavoritesScreenState extends State<MyFavoritesScreen> {
   @override
   void initState() {
-    setState(() {});
+    //setState(() {});
     super.initState();
   }
 
@@ -84,13 +84,7 @@ class _MyFavoritesScreenState extends State<MyFavoritesScreen> {
                                           audioConverter(fav.value, index);
 
                                           // Move the navigation to NowPlayingScreen here
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  NowPlayingScreen(),
-                                            ),
-                                          );
+                                          navigateToNowPlayingScreen();
                                         },
                                         child: Container(
                                           height: 70,
@@ -227,6 +221,15 @@ class _MyFavoritesScreenState extends State<MyFavoritesScreen> {
           ),
         ),
         bottomSheet: const MiniPlayer(),
+      ),
+    );
+  }
+
+  void navigateToNowPlayingScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const NowPlayingScreen(),
       ),
     );
   }
