@@ -125,15 +125,15 @@ class MiniPlayerState extends State<MiniPlayer> {
                 color: Colors.white,
               ),
             ),
-            IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.close,
-                color: Colors.white,
-              ),
-            ),
+            // IconButton(
+            //   onPressed: () {
+            //     Navigator.pop(context);
+            //   },
+            //   icon: const Icon(
+            //     Icons.close,
+            //     color: Colors.white,
+            //   ),
+            // ),
           ],
         );
       },

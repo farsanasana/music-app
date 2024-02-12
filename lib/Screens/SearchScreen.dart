@@ -1,105 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:newwwone/DB/Db_fuctions.dart';
 import 'package:newwwone/DB/main_Models.dart';
+import 'package:newwwone/Screens/Allsongs.dart';
 import 'package:newwwone/Screens/NowplayingScreen.dart';
 import 'package:newwwone/Screens/SlashScreen.dart';
-import 'package:newwwone/DB/mainFun.dart';
 import 'package:newwwone/Screens/playlist/Add_to_playlist.dart';
-import 'package:newwwone/Screens/searchScreen.dart';
-import 'package:newwwone/Screens/settings/settings_screen.dart';
 import 'package:newwwone/colors.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
-ValueNotifier<List<AllSongModel>> allSongsNotifier = ValueNotifier([]);
-
-final OnAudioQuery _audioQuery = OnAudioQuery();
-
-class Allsongs extends StatefulWidget {
-  const Allsongs({Key? key}) : super(key: key);
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({
+    super.key,
+  });
 
   @override
-  State<Allsongs> createState() => _AllsongsState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-List<AllSongModel> searchlist = allSongsNotifier.value;
-TextEditingController search = TextEditingController();
-
-class _AllsongsState extends State<Allsongs> {
-  @override
-  void initState() {
-    fetchSongs();
-    super.initState();
-  }
-
-  Future<void> fetchSongs() async {
-    List<SongModel> fetchSong = await audioQuery.querySongs();
-    List<AllSongModel> songs = [];
-    for (SongModel element in fetchSong) {
-      songs.add(
-        AllSongModel(
-          name: element.displayNameWOExt,
-          artist: element.artist,
-          duration: element.duration,
-          id: element.id,
-          uri: element.uri,
-        ),
-      );
-    }
-
-    // Set the new song list to the notifier
-    allSongsNotifier.value = songs;
-  }
+class _SearchScreenState extends State<SearchScreen> {
+  List<AllSongModel> searchlist = allSongsNotifier.value;
+  TextEditingController search = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final box = Hive.box<AllSongModel>('favorite');
-    // ignore: unused_local_variable
-    List<AllSongModel> songs = box.values.toList();
-
     return SafeArea(
       child: Scaffold(
-        backgroundColor: KPprimary,
         appBar: AppBar(
           backgroundColor: KBprimary,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(50),
+              bottom: Radius.circular(55),
             ),
           ),
-          //centerTitle: true,
           title: const Text(
-            'Riz Music',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
+            'Search',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            const SearchScreen()));
-              },
-              icon: const Icon(Icons.search),
-              color: Colors.white,
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            const SettingsScreen()));
-              },
-              icon: const Icon(Icons.settings),
-              color: Colors.white,
-            ),
-          ],
         ),
         body: Container(
           decoration: const BoxDecoration(
@@ -107,54 +43,62 @@ class _AllsongsState extends State<Allsongs> {
                   begin: Alignment.topRight,
                   end: Alignment.topLeft,
                   colors: MixPrimary)),
-          child: Row(
-            children: [
-              Expanded(
-                child: FutureBuilder<List<SongModel>>(
-                    future:
-                        _audioQuery.querySongs(), // Use _audioQuery directly
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<SongModel>> allsongs) {
-                      if (allsongs.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (allsongs.hasError) {
-                        return Center(
-                          child: Text(
-                            "Error: ${allsongs.error}",
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        );
-                      } else if (allsongs.data == null ||
-                          allsongs.data!.isEmpty) {
-                        return const Center(
-                          child: Text(
-                            "No Songs Found",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        );
-                      } else {
-                        return ListView.separated(
-                          itemBuilder: (context, index) => Padding(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Kprimary,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: TextField(
+                    controller: search,
+                    onChanged: (value) {
+                      setState(() {
+                        searchlist = allSongs
+                            .where(
+                              (element) => element.name!.toLowerCase().contains(
+                                    value.toLowerCase(),
+                                  ),
+                            )
+                            .toList();
+                      });
+                    },
+                    decoration: const InputDecoration(
+                      hintText: 'Search...',
+                      hintStyle: TextStyle(
+                        color: Colors.white,
+                      ),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(16),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Row(
                               children: [
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(16),
                                   child: QueryArtworkWidget(
-                                    artworkClipBehavior: Clip.none,
-                                    artworkHeight: 50,
-                                    artworkWidth: 50,
-                                    nullArtworkWidget: Image.asset(
-                                      'assets/music.jpg',
-                                      fit: BoxFit.cover,
-                                      width: 50,
-                                      height: 50,
-                                    ),
-                                    id: allSongs[index].id!,
-                                    type: ArtworkType.AUDIO,
-                                  ),
+                                      artworkClipBehavior: Clip.none,
+                                      artworkHeight: 70,
+                                      artworkWidth: 70,
+                                      nullArtworkWidget: Image.asset(
+                                        'assets/dummy.jpg',
+                                        fit: BoxFit.cover,
+                                        width: 70,
+                                        height: 70,
+                                      ),
+                                      id: searchlist[index].id!,
+                                      type: ArtworkType.AUDIO),
                                 ),
                                 const SizedBox(
                                   width: 8,
@@ -162,45 +106,37 @@ class _AllsongsState extends State<Allsongs> {
                                 Expanded(
                                   child: InkWell(
                                     onTap: () {
-                                      audioConverter(allSongs,
-                                          index); // Uncomment this line if needed
+                                      audioConverter(searchlist, index);
                                       Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  NowPlayingScreen(
-                                                    music: allSongs[index],
-                                                  )));
-                                    },
-                                    child: Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        color: KBprimary,
-                                      ),
-                                      child: ListTile(
-                                        title: SizedBox(
-                                          height: 20,
-                                          child: Text(
-                                            allsongs.data![index].title,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                            ),
-                                            maxLines: 1,
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              NowPlayingScreen(
+                                            music: searchlist[index],
                                           ),
                                         ),
-                                        subtitle: SizedBox(
-                                          height: 20,
-                                          child: Text(
-                                            allsongs.data![index].artist ??
+                                      );
+                                    },
+                                    child: Container(
+                                      height: 70,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          color: Kprimary),
+                                      child: ListTile(
+                                        title: Text(searchlist[index].name!,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white),
+                                            maxLines: 1),
+                                        subtitle: Text(
+                                            searchlist[index].artist ??
                                                 'unknown',
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.white),
-                                            maxLines: 1,
-                                          ),
-                                        ),
+                                            maxLines: 1),
                                         trailing: PopupMenuButton(
                                           icon: const Icon(
                                             Icons.more_vert,
@@ -333,18 +269,16 @@ class _AllsongsState extends State<Allsongs> {
                                 ),
                               ],
                             ),
-                          ),
-                          separatorBuilder: (context, index) => const SizedBox(
-                            height: 8,
-                          ),
-                          itemCount: allsongs.data!.length,
-                        );
-                      }
-                    }),
-              ),
-            ],
+                          );
+                        },
+                        itemCount: searchlist.length),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
+        backgroundColor: KPprimary,
       ),
     );
   }
