@@ -1,5 +1,3 @@
-// ignore: file_names
-
 import 'package:flutter/material.dart';
 import 'package:newwwone/DB/Db_fuctions.dart';
 import 'package:newwwone/DB/main_Models.dart';

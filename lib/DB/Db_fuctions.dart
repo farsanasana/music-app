@@ -67,7 +67,7 @@ void addToDb({required List<AllSongModel> songs}) async {
 Future<List<AllSongModel>> getSongs() async {
   final musicDb = await Hive.openBox('songs_db');
   List<AllSongModel> songs = [];
-  if (songs.length < 1) {
+  if (songs.isEmpty) {
     for (AllSongModel s in musicDb.values) {
       // print('this is form db ${s.title}');
       songs.add(s);
@@ -114,8 +114,8 @@ bool favoriteChecking(int data) {
   }
   return false;
 }
-
 //RecentPlay Screen
+
 ValueNotifier<List<AllSongModel>> recentList = ValueNotifier([]);
 
 recentadd(AllSongModel song) async {
@@ -140,6 +140,7 @@ recentadd(AllSongModel song) async {
     recentDb.deleteAt(0);
   }
 }
+
 //PlayList
 
 ValueNotifier<List<PlayListModel>> playlistnotifier = ValueNotifier([]);

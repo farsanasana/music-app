@@ -1,6 +1,5 @@
 // import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:on_audio_query_platform_interface/src/models/song_model.dart';
 part 'main_Models.g.dart';
 
 @HiveType(typeId: 1)
@@ -22,8 +21,6 @@ class AllSongModel extends HiveObject {
       required this.duration,
       required this.id,
       required this.uri});
-
-  static fromSongModel(SongModel song) {}
 }
 
 @HiveType(typeId: 2)
