@@ -28,13 +28,20 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
       valueListenable: playlistnotifier,
       builder: (context, value, child) {
         return Scaffold(
-          backgroundColor: KPprimary,
           appBar: AppBar(
-            // automaticallyImplyLeading: false,
-            backgroundColor: KBprimary,
+            backgroundColor: Kprimary,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(50),
+              ),
+            ),
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: MixPrimary, // Assuming MixPrimary is a List<Color>
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                ),
               ),
             ),
             title: const Text(

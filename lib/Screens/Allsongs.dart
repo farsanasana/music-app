@@ -10,6 +10,7 @@ import 'package:newwwone/Screens/searchScreen.dart';
 import 'package:newwwone/Screens/settings/settings_screen.dart';
 import 'package:newwwone/colors.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:flutter/material.dart';
 
 ValueNotifier<List<AllSongModel>> allSongsNotifier = ValueNotifier([]);
 
@@ -59,15 +60,22 @@ class _AllsongsState extends State<Allsongs> {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: KPprimary,
         appBar: AppBar(
-          backgroundColor: KBprimary,
+          backgroundColor: Kprimary,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(50),
             ),
           ),
-          //centerTitle: true,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: MixPrimary, // Assuming MixPrimary is a List<Color>
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+              ),
+            ),
+          ),
           title: const Text(
             'Riz Music',
             style: TextStyle(
@@ -80,10 +88,11 @@ class _AllsongsState extends State<Allsongs> {
             IconButton(
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            const SearchScreen()));
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const SearchScreen(),
+                  ),
+                );
               },
               icon: const Icon(Icons.search),
               color: Colors.white,
@@ -91,10 +100,11 @@ class _AllsongsState extends State<Allsongs> {
             IconButton(
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            const SettingsScreen()));
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const SettingsScreen(),
+                  ),
+                );
               },
               icon: const Icon(Icons.settings),
               color: Colors.white,

@@ -27,7 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           title: const Text(
             'Settings',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           leading: IconButton(
             onPressed: () {
@@ -129,7 +129,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   // Method to show the share dialog with a predefined text
   void _shareApp() {
-    const String text = 'my app link';
+    const String text = 'https://www.amazon.com/dp/B0CVMY5X61/ref=apps_sf_sta';
     Share.share(text);
   }
 }

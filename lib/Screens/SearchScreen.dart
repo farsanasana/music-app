@@ -26,10 +26,19 @@ class _SearchScreenState extends State<SearchScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: KBprimary,
+          backgroundColor: Kprimary,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(55),
+              bottom: Radius.circular(50),
+            ),
+          ),
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: MixPrimary, // Assuming MixPrimary is a List<Color>
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+              ),
             ),
           ),
           title: const Text(

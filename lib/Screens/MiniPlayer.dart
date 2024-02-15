@@ -35,7 +35,11 @@ class MiniPlayerState extends State<MiniPlayer> {
 
   Widget buildMiniPlayer(Playing playing) {
     return Container(
-      color: Colors.transparent,
+      decoration: const BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.topLeft,
+              colors: MixPrimary)),
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.rectangle,
@@ -46,7 +50,7 @@ class MiniPlayerState extends State<MiniPlayer> {
         height: 50,
         width: MediaQuery.of(context).size.width,
         child: InkWell(
-          onTap: () {
+          onDoubleTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => const NowPlayingScreen(),
