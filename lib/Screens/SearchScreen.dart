@@ -36,6 +36,16 @@ class _SearchScreenState extends State<SearchScreen> {
             'Search',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              size: 28,
+              color: Colors.white,
+            ),
+          ),
         ),
         body: Container(
           decoration: const BoxDecoration(
@@ -65,6 +75,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             .toList();
                       });
                     },
+                    style: const TextStyle(color: Colors.white),
                     decoration: const InputDecoration(
                       hintText: 'Search...',
                       hintStyle: TextStyle(

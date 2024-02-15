@@ -79,7 +79,7 @@ class _AllsongsState extends State<Allsongs> {
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (BuildContext context) =>
@@ -90,7 +90,7 @@ class _AllsongsState extends State<Allsongs> {
             ),
             IconButton(
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (BuildContext context) =>
